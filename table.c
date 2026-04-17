@@ -218,7 +218,7 @@ void markTable(Table* table) {
 //< Garbage Collection mark-table
 
 // added new function
-// Chapeter 20 - Challenge Question 1
+// Chapter 20 - Challenge Question 1
 static uint32_t hashValue (Value value) {
   switch(value.type) {
     case VAL_BOOL:
@@ -237,4 +237,19 @@ static uint32_t hashValue (Value value) {
     }
   }
   return 0;
+}
+
+
+// Chapter 21 - Challenge Question 1
+static uint8_t identifierConstant (Token* name) {
+  for (int i = 0; i < currentChunk->constants.count; i++) {
+    Value existingChar = currentChunk->constants.value[i];
+    if (!IS_STRING(existingChar)) continue;
+    ObjString* existingStr = AS_STRING(existingChar);
+
+    if (existingStr->length == name->length && memcmp(existingStr->chars, name->start, name->length) == 0) {
+      return(uint8_t)i;
+    }
+  }
+  return makeConstant(OBJ_VAL(copyString(name->start, name->length)));
 }
